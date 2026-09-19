@@ -1,0 +1,9 @@
+backup-*/
+legacy-index.html
+app.js
+planner.js
+planner.test.js
+styles.css
+node_modules/
+*.log
+*.tmp

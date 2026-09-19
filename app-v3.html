@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#21352d" />
+    <meta name="description" content="面向山东专升本的手机每日学习执行器" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>稳步学习</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles-v3.css" />
+  </head>
+  <body>
+    <div class="app-frame">
+      <header class="app-header">
+        <button class="brand-button" data-view-target="today" aria-label="返回今天">
+          <span class="brand-mark" aria-hidden="true">稳</span>
+          <span class="brand-copy"><strong>稳步学习</strong><small>2027 专升本</small></span>
+        </button>
+        <div class="header-actions">
+          <span class="connection-state" id="connectionState"><i data-lucide="wifi"></i><span>在线</span></span>
+          <button class="icon-button install-trigger hidden" id="installButton" title="安装到桌面" aria-label="安装到桌面">
+            <i data-lucide="download"></i>
+          </button>
+          <button class="icon-button" data-view-target="progress" title="进度与设置" aria-label="进度与设置">
+            <i data-lucide="settings-2"></i>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="view" id="todayView" data-view="today">
+          <div class="content-column">
+            <header class="day-heading">
+              <div>
+                <p class="date-line" id="todayDate"></p>
+                <h1 id="todayGreeting">先完成今天最小的一步。</h1>
+              </div>
+              <span class="baseline-chip">2026 官方基线</span>
+            </header>
+
+            <div class="mode-row">
+              <div>
+                <strong>今天的状态</strong>
+                <span id="modeSummary">保底 · 15 分钟</span>
+              </div>
+              <div class="mode-switch" role="group" aria-label="今天的学习状态">
+                <button data-mode="minimum" class="active">保底</button>
+                <button data-mode="standard">正常</button>
+                <button data-mode="full">充足</button>
+              </div>
+              <button class="rescue-button" id="rescueMode"><i data-lucide="life-buoy"></i>只做 5 分钟</button>
+            </div>
+
+            <section class="task-stage" id="taskStage" aria-live="polite"></section>
+
+            <section class="queue-section" aria-labelledby="queueTitle">
+              <div class="section-heading">
+                <div><span>今日队列</span><h2 id="queueTitle">一次只处理一项</h2></div>
+                <strong id="queueProgress">0 / 0</strong>
+              </div>
+              <div class="queue-list" id="queueList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view hidden" id="reviewView" data-view="review">
+          <div class="content-column">
+            <header class="page-heading">
+              <p>到期复习</p>
+              <h1>先处理真正容易忘的内容。</h1>
+              <span id="reviewSummary"></span>
+            </header>
+            <div class="due-list" id="dueList"></div>
+            <section class="history-section">
+              <div class="section-heading">
+                <div><span>最近结果</span><h2>小测记录</h2></div>
+              </div>
+              <div class="history-list" id="historyList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view hidden" id="progressView" data-view="progress">
+          <div class="content-column">
+            <header class="page-heading">
+              <p>学习进度</p>
+              <h1>只看掌握证据，不看坐了多久。</h1>
+              <span>2027 完整考试要求尚未发布，当前按 2026 官方要求准备。</span>
+            </header>
+
+            <section class="metric-grid" id="metricGrid"></section>
+
+            <section class="week-section">
+              <div class="section-heading">
+                <div><span>最近七天</span><h2>启动情况</h2></div>
+                <strong id="activeDayCount">0 天</strong>
+              </div>
+              <div class="week-track" id="weekTrack"></div>
+            </section>
+
+            <section class="map-section">
+              <div class="section-heading">
+                <div><span>官方范围</span><h2>四科知识地图</h2></div>
+                <strong id="mapSummary"></strong>
+              </div>
+              <div class="subject-tabs" id="subjectTabs" role="tablist" aria-label="筛选知识地图"></div>
+              <div class="module-list" id="moduleList"></div>
+            </section>
+
+            <section class="data-section">
+              <div class="section-heading">
+                <div><span>本机数据</span><h2>备份与安装</h2></div>
+              </div>
+              <div class="data-actions">
+                <button class="secondary-button" id="exportData"><i data-lucide="download"></i>导出学习记录</button>
+                <button class="secondary-button" id="importData"><i data-lucide="upload"></i>导入学习记录</button>
+                <button class="primary-button install-trigger hidden" id="installProgress"><i data-lucide="smartphone"></i>安装到手机桌面</button>
+                <input class="hidden" id="importFile" type="file" accept="application/json" />
+              </div>
+              <p class="data-note" id="dataNote">记录保存在当前设备。清除浏览器网站数据前请先导出备份。</p>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="主导航">
+        <button class="active" data-view-target="today"><i data-lucide="circle-play"></i><span>今天</span></button>
+        <button data-view-target="review"><i data-lucide="rotate-ccw"></i><span>复习</span><b id="dueBadge" class="hidden">0</b></button>
+        <button data-view-target="progress"><i data-lucide="chart-no-axes-column-increasing"></i><span>进度</span></button>
+      </nav>
+    </div>
+
+    <dialog class="install-dialog" id="installDialog">
+      <div class="dialog-head">
+        <div><span>安装到 Android</span><h2>添加到手机桌面</h2></div>
+        <button class="icon-button" id="closeInstallDialog" aria-label="关闭"><i data-lucide="x"></i></button>
+      </div>
+      <ol>
+        <li>使用 Chrome 打开正式部署链接。</li>
+        <li>点击浏览器右上角菜单。</li>
+        <li>选择“安装应用”或“添加到主屏幕”。</li>
+      </ol>
+      <button class="primary-button full-button" id="confirmInstallHelp">知道了</button>
+    </dialog>
+
+    <div class="toast hidden" id="toast" role="status">
+      <i data-lucide="circle-check"></i><span id="toastText"></span>
+    </div>
+
+    <script src="lucide.min.js"></script>
+    <script src="curriculum.js"></script>
+    <script src="planner-v3.js"></script>
+    <script src="app-v3.js"></script>
+  </body>
+</html>
